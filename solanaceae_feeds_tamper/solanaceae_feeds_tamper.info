@@ -1,0 +1,7 @@
+core = "7.x"
+name = "Solanaceae XML feeds tamper"
+description = "Tamper plugins for XML feeds from Brahms"
+package = "Solanaceae"
+dependencies[] = feeds_tamper
+
+files[] = solanaceae_feeds_tamper.module

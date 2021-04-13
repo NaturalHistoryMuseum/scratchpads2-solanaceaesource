@@ -1,0 +1,11 @@
+<?php
+
+function solanaceae_tweaks_init(){
+  global $user;
+  drupal_add_css(drupal_get_path('module', 'solanaceae_tweaks') . '/css/solanaceae.css');
+  //dpm($user);
+  //if (!in_array('authenticated user', $user->roles)) {
+  if($user->uid == 0 | $user->uid == 1 ){
+    drupal_add_css(drupal_get_path('module', 'solanaceae_tweaks') . '/css/role.css');
+  }
+}

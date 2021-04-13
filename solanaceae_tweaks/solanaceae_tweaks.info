@@ -1,0 +1,4 @@
+core = "7.x"
+name = "Solanaceae tweaks"
+description = "Tweaks for Solanaceae source"
+package = "Solanaceae"

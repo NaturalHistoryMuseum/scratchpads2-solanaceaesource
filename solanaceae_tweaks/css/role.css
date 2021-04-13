@@ -1,0 +1,37 @@
+/* hide unwanted genera unless role is maintainer*/
+/*Boraginaceae*/
+.tinytax li#tinytax-69012 { 
+	display:none;
+}
+/*Caricaceae*/
+.tinytax li#tinytax-69007 {
+	display:none;
+}
+/*Fabaceae*/
+.tinytax li#tinytax-69013 {
+	display:none;
+}
+/*Gesneriaceae*/
+.tinytax li#tinytax-69011 {
+	display:none;
+}
+/*Indet*/
+.tinytax li#tinytax-69004 {
+	display:none;
+}
+/*Moraceae*/
+.tinytax li#tinytax-69006 {
+	display:none;
+}
+/*Polemoniaceae*/
+.tinytax li#tinytax-69010 {
+	display:none;
+}
+/*Rutaceae*/
+.tinytax li#tinytax-69009 {
+	display:none;
+}
+/*Scrophulariaceae*/
+.tinytax li#tinytax-69008 {
+	display:none;
+}

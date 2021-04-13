@@ -1,0 +1,45 @@
+/* start field work */
+.view-solanaceae-field-work-content .item-list ul li {
+	float: left;
+	margin: 0 0 1em 0;
+}
+
+.views-field.views-field-field-sol-fw-intro-image {
+	float: left;
+	margin-right: 1em;
+}
+
+.view-solanaceae-field-work-content .views-field.views-field-body {
+	margin-top: 1em;
+}
+
+#views_slideshow_cycle_main_solanaceae_field_work_content-attachment_1 {
+	text-align: center;
+}
+
+div.view-solanaceae-field-work-content div.views-slideshow-pager-field-item
+	{
+	float: left;
+	padding-right: 1em;
+	padding-bottom: 1em;
+}
+
+#views_slideshow_cycle_main_solanaceae_field_work_content-attachment_1 .views-slideshow-cycle-main-frame-row
+	{
+	width: 100% !important;
+	text-align: center;
+}
+
+.view-solanaceae-field-work-content .views-slideshow-controls-bottom {
+	margin-left: 82px;
+}
+
+.view-solanaceae-field-work-content .view-solanaceae-field-work-content.grid-8
+	{
+	margin-left: 12.5%;
+}
+/* end field work */
+/* user picture */
+.site-solanaceae-myspecies-info .profile .user-picture {
+	float:none;
+}

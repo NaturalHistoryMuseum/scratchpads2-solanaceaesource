@@ -1,0 +1,81 @@
+<?php
+/**
+ * feeds_tamper API definition for drupal 
+ * unacceptible reasons mapping
+ * Allow for mapping values from an allowed itis unacceptibility terms to Brahms terms
+ * assign it to the field which represents the incoming Brahms unacceptibility code ie taxstat
+ */
+$plugin = array(
+  'form' => 'solanaceae_feeds_core_accepted_form',
+  'callback' => 'solanaceae_feeds_core_accepted_callback',
+  'validate' => 'solanaceae_feeds_core_accepted_validate',
+  'name' => 'Map core accepted',
+  'multi' => 'direct',
+  'category' => 'Filter',
+  'description' => 'This will allow you to map Brahms core accepted to Scratchpad parent.'
+);
+
+/**
+ * Form for building the Brahms to Scratchpad unit indicator term mapping
+ */
+function solanaceae_feeds_core_accepted_form($importer, $element_key, $settings){
+  $form = array();
+  $form['separator'] = array(
+    '#type' => 'textfield',
+    '#title' => t('String separator'),
+    '#default_value' => isset($settings['separator']) ? $settings['separator'] : ',',
+    '#description' => t('This will break up sequenced data into an array. For example, "a, b, c" would get broken up into the array(\'a\', \'b\', \'c\').
+                        A space can be represented by %s, tabs by %t, and newlines by %n.')
+  );
+  $form['limit'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Limit'),
+    '#default_value' => isset($settings['limit']) ? $settings['limit'] : '',
+    '#description' => t('If limit is set and positive, the returned items will contain a maximum of limit with the last item containing the rest of string.
+                        If limit is negative, all components except the last -limit are returned. If the limit parameter is zero, then this is treated as 1. If limit is not set, then there will be no limit on the number of items returned.')
+  );
+  return $form;
+}
+
+function solanaceae_feeds_core_accepted_validate(&$settings){
+  $settings['real_separator'] = str_replace(array(
+    '%s',
+    '%t',
+    '%n'
+  ), array(
+    ' ',
+    "\t",
+    "\n"
+  ), $settings['separator']);
+  $settings['limit'] = trim($settings['limit']);
+  if($settings['limit'] === '0'){
+    $settings['limit'] = 1;
+  }
+  if(!empty($settings['limit']) && !ctype_digit($settings['limit'])){
+    form_set_error('settings][limit', t('Limit must be an integer or blank.'));
+  }
+}
+
+/**
+ * Function to process the value conversion
+ * Called by the feed (via Feed Tamper) to modify data.
+ */
+function solanaceae_feeds_core_accepted_callback($result, $item_key, $element_key, &$field, $settings){
+  // dpm($result);
+  $out = array();
+  if(!is_array($field)){
+    $field = array(
+      $field
+    );
+  }
+  foreach($field as $f){
+    if(strpos($f, $settings['real_separator']) === FALSE){
+      $out[] = $f;
+    }elseif(empty($settings['limit'])){
+      $out = array_merge($out, explode($settings['real_separator'], $f));
+    }else{
+      $out = array_merge($out, explode($settings['real_separator'], $f, $settings['limit']));
+    }
+  }
+  $field = $out[0] . ' ' . $out[1];
+}

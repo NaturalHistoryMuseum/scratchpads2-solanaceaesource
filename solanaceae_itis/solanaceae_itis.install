@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * Implements hook_install.
+ * Update allowed values in field_usage.
+ */
+function solanaceae_itis_enable(){
+  $field_config = field_info_field('field_usage');
+  if(!empty($field_config)){
+    $field_config['settings']['allowed_values_function'] = 'solanaceae_itis_allowed_values';
+    field_update_field($field_config);
+    watchdog('solanaceae_itis', 'new allowed_values_function for field_usage have been added');
+  }
+}
+
+function solanaceae_itis_disable(){
+  $field_config = field_info_field('field_usage');
+  if(!empty($field_config)){
+    module_load_include('fields.inc', 'itis_term');
+    $field_config['settings']['allowed_values_function'] = 'itis_term_allowed_values';
+    field_update_field($field_config);
+    watchdog('solanaceae_itis', 'new allowed_values_function for field_usage have been removed and allowed_values_function is returned to ITIS norm');
+  }
+}

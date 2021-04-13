@@ -1,0 +1,304 @@
+<?php
+
+function solanaceae_itis_form_taxonomy_form_term_alter(&$form, &$form_state, $form_id){
+  $vids = variable_get('biological_vids', array());
+  $field_usage_allowed_values = solanaceae_itis_allowed_values(array(
+    'field_name' => 'field_usage'
+  ), $vids[$form['vid']['#value']]);
+  $itis_field_usage_allowed_values = itis_term_allowed_values(array(
+    'field_name' => 'field_usage'
+  ), $vids[$form['vid']['#value']]);
+  if(array_diff_key($itis_field_usage_allowed_values, $field_usage_allowed_values)){
+    $newTerms = implode(' ,', array_diff_key($itis_field_usage_allowed_values, $field_usage_allowed_values));
+    drupal_set_message(t('There is a new allowed term in Itis: @newTerm. Please have admin update this module.', array(
+      '@newTerm' => $newTerms
+    )), 'warning');
+  }
+  $form['field_usage'][$form['field_usage']['#language']]['#options'] = array_merge(array(
+    '_none' => $form['field_usage'][$form['field_usage']['#language']]['#options']['_none']
+  ), $field_usage_allowed_values);
+  $field_rank_allowed_values = solanaceae_itis_allowed_values(array(
+    'field_name' => 'field_rank'
+  ), $vids[$form['vid']['#value']]);
+  $itis_field_rank_allowed_values = itis_term_allowed_values(array(
+    'field_name' => 'field_rank'
+  ), $vids[$form['vid']['#value']]);
+  if(array_diff_key($itis_field_rank_allowed_values, $field_rank_allowed_values)){
+    $newRankTerms = implode(' ,', array_diff_key($itis_field_rank_allowed_values, $field_rank_allowed_values));
+    drupal_set_message(t('There is a new allowed term in Itis: @newTerm. Please have admin update this module.', array(
+      '@newRankTerms' => $newRankTerms
+    )), 'warning');
+  }
+  $form['field_rank'][$form['field_rank']['#language']]['#options'] = array_merge(array(
+    '_none' => $form['field_rank'][$form['field_rank']['#language']]['#options']['_none']
+  ), $field_rank_allowed_values);
+}
+
+/**
+ * Get an array of terms for a vocabulary
+ */
+function solanaceae_itis_allowed_values($field, $biological_type = FALSE){
+  switch($field['field_name']){
+    case 'field_rank':
+      if($biological_type){
+        switch($biological_type){
+          case 1:
+            return array(
+              'Kingdom' => 'Kingdom',
+              'Subkingdom' => 'Subkingdom',
+              'Phylum' => 'Phylum',
+              'Subphylum' => 'Subphylum',
+              'Superclass' => 'Superclass',
+              'Class' => 'Class',
+              'Subclass' => 'Subclass',
+              'Infraclass' => 'Infraclass',
+              'Superorder' => 'Superorder',
+              'Order' => 'Order',
+              'Suborder' => 'Suborder',
+              'Infraorder' => 'Infraorder',
+              'Superfamily' => 'Superfamily',
+              'Family' => 'Family',
+              'Subfamily' => 'Subfamily',
+              'Tribe' => 'Tribe',
+              'Subtribe' => 'Subtribe',
+              'Genus' => 'Genus',
+              'Subgenus' => 'Subgenus',
+              'Species' => 'Species',
+              'Subspecies' => 'Subspecies'
+            );
+          case 2:
+            return array(
+              'Kingdom' => 'Kingdom',
+              'Subkingdom' => 'Subkingdom',
+              'Division' => 'Division',
+              'Subdivision' => 'Subdivision',
+              'Class' => 'Class',
+              'Subclass' => 'Subclass',
+              'Order' => 'Order',
+              'Suborder' => 'Suborder',
+              'Family' => 'Family',
+              'Subfamily' => 'Subfamily',
+              'Tribe' => 'Tribe',
+              'Subtribe' => 'Subtribe',
+              'Genus' => 'Genus',
+              'Subgenus' => 'Subgenus',
+              'Section' => 'Section',
+              'Subsection' => 'Subsection',
+              'Species' => 'Species',
+              'Subspecies' => 'Subspecies',
+              'Variety' => 'Variety',
+              'Subvariety' => 'Subvariety',
+              'Convariety' => 'Convariety',
+              'Provariety' => 'Provariety',
+              'Form' => 'Form',
+              'Subform' => 'Subform',
+              'No status' => 'No status'
+            );
+          case 3:
+            return array(
+              'Kingdom' => 'Kingdom',
+              'Subkingdom' => 'Subkingdom',
+              'Phylum' => 'Phylum',
+              'Subphylum' => 'Subphylum',
+              'Superclass' => 'Superclass',
+              'Class' => 'Class',
+              'Subclass' => 'Subclass',
+              'Infraclass' => 'Infraclass',
+              'Superorder' => 'Superorder',
+              'Order' => 'Order',
+              'Suborder' => 'Suborder',
+              'Infraorder' => 'Infraorder',
+              'Superfamily' => 'Superfamily',
+              'Family' => 'Family',
+              'Subfamily' => 'Subfamily',
+              'Tribe' => 'Tribe',
+              'Subtribe' => 'Subtribe',
+              'Genus' => 'Genus',
+              'Subgenus' => 'Subgenus',
+              'Species' => 'Species',
+              'Subspecies' => 'Subspecies'
+            );
+        }
+      }
+      return array(
+        'Class' => 'Class',
+        'Division' => 'Division',
+        'Family' => 'Family',
+        'Form' => 'Form',
+        'Genus' => 'Genus',
+        'Infraclass' => 'Infraclass',
+        'Infraorder' => 'Infraorder',
+        'Kingdom' => 'Kingdom',
+        'Order' => 'Order',
+        'Phylum' => 'Phylum',
+        'Section' => 'Section',
+        'Species' => 'Species',
+        'Subclass' => 'Subclass',
+        'Subdivision' => 'Subdivision',
+        'Subfamily' => 'Subfamily',
+        'Subform' => 'Subform',
+        'Subgenus' => 'Subgenus',
+        'Subkingdom' => 'Subkingdom',
+        'Suborder' => 'Suborder',
+        'Subphylum' => 'Subphylum',
+        'Subsection' => 'Subsection',
+        'Subspecies' => 'Subspecies',
+        'Subtribe' => 'Subtribe',
+        'Subvariety' => 'Subvariety',
+        'Superclass' => 'Superclass',
+        'Superfamily' => 'Superfamily',
+        'Superorder' => 'Superorder',
+        'Tribe' => 'Tribe',
+        'Variety' => 'Variety'
+      );
+    case 'field_unacceptability_reason':
+      if($biological_type){
+        switch($biological_type){
+          case 1:
+          case 3:
+            return array(
+              'junior synonym' => 'junior synonym',
+              'objective synonym' => 'objective synonym',
+              'subjective synonym' => 'subjective synonym',
+              'original name/combination' => 'original name/combination',
+              'subsequent name/combination' => 'subsequent name/combination',
+              'junior homonym' => 'junior homonym',
+              'homonym & junior synonym' => 'homonym & junior synonym',
+              'unavailable, database artifact' => 'unavailable, database artifact',
+              'unavailable, literature misspelling' => 'unavailable, literature misspelling',
+              'unavailable, incorrect original spelling' => 'unavailable, incorrect original spelling',
+              'unavailable, suppressed by ruling' => 'unavailable, suppressed by ruling',
+              'unavailable, nomen nudum' => 'unavailable, nomen nudum',
+              'unavailable, other' => 'unavailable, other',
+              'unjustified emendation' => 'unjustified emendation',
+              'unnecessary replacement' => 'unnecessary replacement',
+              'nomen oblitum' => 'nomen oblitum',
+              'misapplied' => 'misapplied',
+              'pro parte' => 'pro parte',
+              'other' => 'other',
+              'nomen dubium' => 'nomen dubium'
+            );
+          case 2:
+            return array(
+              'synonym' => 'synonym',
+              'homotypic (nomenclatural) synonym' => 'homotypic (nomenclatural) synonym',
+              'heterotypic (taxonomic) synonym' => 'heterotypic (taxonomic) synonym',
+              'homonym (illegitimate)' => 'homonym (illegitimate)',
+              'superfluous renaming (illegitimate)' => 'superfluous renaming (illegitimate)',
+              'rejected name' => 'rejected name',
+              'invalidly published, nomen nudum' => 'invalidly published, nomen nudum',
+              'invalidly published, other' => 'invalidly published, other',
+              'misapplied' => 'misapplied',
+              'pro parte' => 'pro parte',
+              'horticultural' => 'horticultural',
+              'database artifact' => 'database artifact',
+              'orthographic variant (misspelling)' => 'orthographic variant (misspelling)',
+              'other' => 'other'
+            );
+        }
+      }
+      return array(
+        'database artifact' => 'database artifact',
+        'heterotypic (taxonomic) synonym' => 'heterotypic (taxonomic) synonym',
+        'homonym (illegitimate)' => 'homonym (illegitimate)',
+        'homonym & junior synonym' => 'homonym & junior synonym',
+        'homotypic (nomenclatural) synonym' => 'homotypic (nomenclatural) synonym',
+        'horticultural' => 'horticultural',
+        'invalidly published, nomen nudum' => 'invalidly published, nomen nudum',
+        'invalidly published, other' => 'invalidly published, other',
+        'junior homonym' => 'junior homonym',
+        'junior synonym' => 'junior synonym',
+        'misapplied' => 'misapplied',
+        'nomen dubium' => 'nomen dubium',
+        'nomen oblitum' => 'nomen oblitum',
+        'objective synonym' => 'objective synonym',
+        'original name/combination' => 'original name/combination',
+        'orthographic variant (misspelling)' => 'orthographic variant (misspelling)',
+        'other' => 'other',
+        'pro parte' => 'pro parte',
+        'rejected name' => 'rejected name',
+        'subjective synonym' => 'subjective synonym',
+        'subsequent name/combination' => 'subsequent name/combination',
+        'superfluous renaming (illegitimate)' => 'superfluous renaming (illegitimate)',
+        'synonym' => 'synonym',
+        'unavailable, database artifact' => 'unavailable, database artifact',
+        'unavailable, incorrect original spelling' => 'unavailable, incorrect original spelling',
+        'unavailable, literature misspelling' => 'unavailable, literature misspelling',
+        'unavailable, nomen nudum' => 'unavailable, nomen nudum',
+        'unavailable, other' => 'unavailable, other',
+        'unavailable, suppressed by ruling' => 'unavailable, suppressed by ruling',
+        'unjustified emendation' => 'unjustified emendation',
+        'unnecessary replacement' => 'unnecessary replacement'
+      );
+    case 'field_unit_indicator1':
+    case 'field_unit_indicator2':
+      if($biological_type){return array(
+          '×' => '×'
+        );}
+      return array(
+        'x' => 'x',
+        '×' => '×'
+      );
+    case 'field_unit_indicator3':
+    case 'field_unit_indicator4':
+      if($biological_type){
+        switch($biological_type){
+          case 1:
+          case 3:
+            return array(
+              'f.' => 'f.',
+              'subf.' => 'subf.',
+              'subsp.' => 'subsp.',
+              'subvar.' => 'subvar.',
+              'var.' => 'var.'
+            );
+          case 2:
+            return array(
+              'f.' => 'f.',
+              'ssp.' => 'ssp.',
+              'subf.' => 'subf.',
+              'subvar.' => 'subvar.',
+              'var.' => 'var.',
+              '×' => '×'
+            );
+        }
+      }
+      return array(
+        'f.' => 'f.',
+        'ssp.' => 'ssp.',
+        'subf.' => 'subf.',
+        'subsp.' => 'subsp.',
+        'subvar.' => 'subvar.',
+        'var.' => 'var.',
+        'x' => 'x',
+        '×' => '×'
+      );
+    case 'field_usage':
+      if($biological_type){
+        switch($biological_type){
+          case 1:
+          case 3:
+            return array(
+              'valid' => 'valid',
+              'invalid' => 'invalid'
+            );
+          case 2:
+            return array(
+              'accepted' => 'accepted',
+              'provisionally accepted' => 'provisionally accepted',
+              'not accepted' => 'not accepted',
+              'not evaluated' => 'not evaluated'
+            );
+        }
+      }
+      return array(
+        'accepted' => 'accepted',
+        'provisionally accepted' => 'provisionally accepted',
+        'not accepted' => 'not accepted',
+        'not evaluated' => 'not evaluated',
+        'valid' => 'valid',
+        'invalid' => 'invalid'
+      );
+      break;
+  }
+}
